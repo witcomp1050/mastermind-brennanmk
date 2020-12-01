@@ -44,7 +44,7 @@ public class masterMindCode {
                 for (int i = 0; i < numberOfPegs; i++) { //generate a color for every peg
                     Color color = colorGenerator.generateColor();
 
-                    if (Arrays.stream(code).anyMatch(j -> j == Color.DARKGRAY)) { //check to see if the randomly generated color is grey, if so subtract 1 from iterator
+                    if (color == Color.DARKGRAY) { //check to see if the randomly generated color is grey, if so subtract 1 from iterator
                         i--;
                     } else { //if the color is not blank add it to the code array
                         code[i] = color;
