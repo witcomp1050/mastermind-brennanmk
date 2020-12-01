@@ -76,7 +76,9 @@ public class Controller extends Application {
                 System.out.println("YOU WIN\n"); //print win message in console
                 rowCounter = 0; //reset the row counter for if the game is restarted
                 Label winMessage = new Label("You Won!"); //create win message
-                winMessage.setTextFill(Color.WHITE); //format the win message label
+                if(darkMode) {
+                    winMessage.setTextFill(Color.WHITE); //format the win message label
+                }
                 popupGrid.add(winMessage, 1,0);
                 popup.show(stage); //display the popup stating that the player won, and prompt if they want to restart or exit
                 start(stage); //reset the program
@@ -84,7 +86,9 @@ public class Controller extends Application {
                 System.out.println("YOU LOSE\n"); //print that the player lost in the console
                 rowCounter = 0;
                 Label lostMessage = new Label("You Lost!"); //create player lost message
-                lostMessage.setTextFill(Color.WHITE);
+                if(darkMode) {
+                    lostMessage.setTextFill(Color.WHITE);
+                }
                 popupGrid.add(lostMessage, 1,0);
                 popup.show(stage); //display the popup stating that the player lost, and prompt if they want to restart or exit
                 start(stage); //reset the program
