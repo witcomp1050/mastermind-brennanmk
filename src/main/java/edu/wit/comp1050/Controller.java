@@ -1,4 +1,4 @@
-package sample;
+package edu.wit.comp1050;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -15,7 +15,7 @@ import java.util.*;
 
 public class Controller extends Application {
     public int numberOfPegs, numberOfRows; //integer variables for row and peg counts
-    public boolean allowDuplicate, allowBlank; //boolean variables for duplicates and blanks
+    public boolean allowDuplicate, allowBlank, darkMode; //boolean variables for duplicates and blanks
     public int rowCounter = 0; //row counter variable
     private final Color[] colors = {Color.RED, Color.BLUE, Color.YELLOW, Color.GREEN, Color.WHITE, Color.BLACK, Color.DARKGRAY}; //list of peg colors
 
@@ -51,7 +51,11 @@ public class Controller extends Application {
             popupGrid.setAlignment(Pos.CENTER);
 
             popupGrid.setMinSize(200,100);
-            popupGrid.setStyle(" -fx-background-color: #1e2124;  -fx-border-color: #7289da;");
+            if(darkMode) {
+                popupGrid.setStyle(" -fx-background-color: #1e2124;  -fx-border-color: #7289da;");
+            }else{
+                popupGrid.setStyle(" -fx-background-color: #FFFFFF;  -fx-border-color: #7289da;");
+            }
             Button replay = new Button("Replay"); //create replay button to be used in the popup
             Button exit = new Button("Quit"); //create quit button to be used in the popup
             popupGrid.add(replay, 0, 1); //add buttons to gridpane
@@ -183,7 +187,11 @@ public class Controller extends Application {
         stage.setScene(scene); //set the stage scene
 
         System.out.println("MasterMind Launched");
-        grid.setStyle("-fx-background-color: #1e2124;"); //set Background color
+        if(darkMode) {
+            grid.setStyle("-fx-background-color: #1e2124;"); //set Background color
+        }else{
+            grid.setStyle("-fx-background-color: #FFFFFF;");
+        }
 
         stage.show();
     }
@@ -196,11 +204,13 @@ public class Controller extends Application {
             numberOfPegs = Integer.parseInt(parseConfig.getProperty("numberOfPegs"));
             allowDuplicate = Boolean.parseBoolean(parseConfig.getProperty("allowDuplicate"));
             allowBlank = Boolean.parseBoolean(parseConfig.getProperty("allowBlank"));
+            darkMode = Boolean.parseBoolean(parseConfig.getProperty("darkMode"));
         }catch(Exception e){
                 numberOfPegs = 4;
                 numberOfRows = 8;
                 allowDuplicate = false;
                 allowBlank = false;
+                darkMode = false;
                 System.out.println("Invalid .properties file, using default configuration");
         }
 

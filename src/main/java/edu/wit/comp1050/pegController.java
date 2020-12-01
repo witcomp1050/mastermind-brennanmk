@@ -1,4 +1,4 @@
-package sample;
+package edu.wit.comp1050;
 
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
