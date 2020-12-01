@@ -17,7 +17,7 @@ public class Controller extends Application {
     public int numberOfPegs, numberOfRows; //integer variables for row and peg counts
     public boolean allowDuplicate, allowBlank; //boolean variables for duplicates and blanks
     public int rowCounter = 0; //row counter variable
-    private final Color[] colors = {Color.RED, Color.BLUE, Color.YELLOW, Color.GREEN, Color.WHITE, Color.BLACK}; //list of peg colors
+    private final Color[] colors = {Color.RED, Color.BLUE, Color.YELLOW, Color.GREEN, Color.WHITE, Color.BLACK, Color.DARKGRAY}; //list of peg colors
 
 
     public int[] pegRandomizer() { //peg randomizer function to randomize the answer pegs that are returned
@@ -99,6 +99,7 @@ public class Controller extends Application {
         pegController pegGenerator = new pegController(colors); //create a global instance of masterMindCode to be used throughout the controller
         GridPane grid = new GridPane(); //create a gridpane to be displayed
         Color[] code = codeGenerator.generateCode(); //generate a code
+
         grid.setHgap(10); //format the grid
         grid.setVgap(10);
         grid.setAlignment(Pos.CENTER);

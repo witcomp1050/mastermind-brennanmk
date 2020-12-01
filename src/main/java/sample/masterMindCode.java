@@ -6,6 +6,7 @@ import javafx.scene.shape.Circle;
 import java.util.Arrays;
 
 public class masterMindCode {
+    //variable declarations
     public int numberOfPegs, numberOfRows;
     public boolean allowDuplicate, allowBlank;
     public Color[] colors;
@@ -20,47 +21,47 @@ public class masterMindCode {
     }
 
     public Color[] generateCode() { //function to generate a random code
-        randomColorGenerator colorGenerator = new randomColorGenerator(colors);
-        Color[] code = new Color[numberOfPegs];
-        if (allowBlank) {
-            if (allowDuplicate) {
-                for (int i = 0; i < numberOfPegs; i++) {
+        randomColorGenerator colorGenerator = new randomColorGenerator(colors); //create a randomColorGenerator
+        Color[] code = new Color[numberOfPegs]; //create an array of colors, the size based on the user entry for number of pegs
+        if (allowBlank) { //check if blanks are allowed
+            if (allowDuplicate) { //check if duplicates are allowed
+                for (int i = 0; i < numberOfPegs; i++) { //for every peg generate a color
                     code[i] = colorGenerator.generateColor();
                 }
-            } else {
+            } else { //if duplicates are not allowed
                 for (int i = 0; i < numberOfPegs; i++) {
                     Color color = colorGenerator.generateColor();
-                    if (Arrays.stream(code).anyMatch(j -> j == color)) {
+                    if (Arrays.stream(code).anyMatch(j -> j == color)) { //check to make sure the color is not already in the code, if so subtract 1 from the iterator
                         if (i != 0) {
                             i--; }
-                    } else {
+                    } else { //if the color is not present in the code it can be added
                             code[i] = color;
                         }
                     }
                 }
-        } else {
-            if (allowDuplicate) {
-                for (int i = 0; i < numberOfPegs; i++) {
+        } else { //if blanks are not allowed
+            if (allowDuplicate) { //check if duplicates are allowed
+                for (int i = 0; i < numberOfPegs; i++) { //generate a color for every peg
                     Color color = colorGenerator.generateColor();
 
-                    if (Arrays.stream(code).anyMatch(j -> j == Color.BLACK)) {
+                    if (Arrays.stream(code).anyMatch(j -> j == Color.DARKGRAY)) { //check to see if the randomly generated color is grey, if so subtract 1 from iterator
                         i--;
-                    } else {
+                    } else { //if the color is not blank add it to the code array
                         code[i] = color;
                     }
                 }
-            } else {
+            } else { //if duplicates are not allowed
                 for (int i = 0; i < numberOfPegs; i++) {
                     Color color = colorGenerator.generateColor();
 
-                    if (color == Color.BLACK) {
+                    if (color == Color.DARKGRAY) { //check to see if the randomly generated color is grey, if so subtract 1 from iterator
                         i--;
-                    } else if(Arrays.stream(code).anyMatch(j -> j == color)) {
+                    } else if(Arrays.stream(code).anyMatch(j -> j == color)) { //if the generated color is not a blank, check to make sure the color is not already present in the code
                         if (i != 0) {
                                 i--;
                             }
                     }
-                    else{
+                    else{ //if the color is not a blank, and is not present in the code add it to the array
                         code[i] = color;
                     }
                 }
@@ -80,11 +81,11 @@ public class masterMindCode {
             }else if(color == Color.BLACK){
                System.out.print("BLACK ");
             }else {
-                System.out.print("ERROR ");
+                System.out.print("BLANK ");
             }
         }
         System.out.print("\n");
-        return code; //return the code
+        return code;
     }
 
     public boolean codeChecker(Color[] code, Circle[] circles, Circle[] pegs, int row) { //function to check if the code is correct
@@ -93,29 +94,39 @@ public class masterMindCode {
         int pegsMin = numberOfPegs * row;
 
         Color[] check = new Color[numberOfPegs];
-        for (int i = 0; i < numberOfPegs; i++) { //for loop to check if the colors the user entered matches the code
+        for (int i = 0; i < numberOfPegs; i++) { //for loop to populate which colors to check the code against
             check[i] = (Color) circles[rowMin].getFill();
             rowMin++;
 
         }
 
-        for (int i = 0; i < numberOfPegs; i++) {
+        boolean[] accountedFor = new boolean[numberOfPegs]; //boolean array to check which pegs are accounted for
 
-            if (code[i] == check[i]) {
-                pegs[pegsMin].setFill(Color.RED);
+        for (int i = 0; i < numberOfPegs; i++){ //set accounted for to false
+            accountedFor[i] = false;
+        }
+        int tempMin = pegsMin; //create a tempMin variable to be used in the first for loop
+
+        for (int i = 0; i < numberOfPegs; i++) { //for loop to check the code against the user entry
+            if (code[i] == check[i]) { //if the code matches set the peg to red
+                pegs[tempMin].setFill(Color.RED);
+                accountedFor[i] = true;
                 correct++;
-            } else {
-                for (int j = 0; j < numberOfPegs; j++) {
-                    if (check[i] == code[j] && pegs[pegsMin].getFill() != Color.RED) {
-                        pegs[pegsMin].setFill(Color.BLACK);
-                    }
-                }
+                tempMin++;
             }
-
-            pegsMin++;
-
         }
 
-        return correct == numberOfPegs;
+        for (int i = 0; i < numberOfPegs; i++) { //for loop to check the code against the user entry
+            for (int j = 0; j < numberOfPegs; j++) {
+                if (check[i] == code[j] && pegs[pegsMin].getFill() != Color.RED && !accountedFor[j]) { //check to see if the color matches, if the color is accounted for in the code already, and verify that the peg is not already set to red, if the conditions are met set the peg color to black.
+                    pegs[pegsMin].setFill(Color.BLACK);
+                    accountedFor[j] = true;
+                    break;
+                }
+            }
+        pegsMin++;
+        }
+
+        return correct == numberOfPegs; //if all of the pegs are correct return true, else return false
     }
 }
